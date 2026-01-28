@@ -1,5 +1,37 @@
-%%
 function [samples,n_loop,min_error] = updateSamples(odf,psi,samples,n_loop,sample,min_error,threshold)
+% updateSamples - Update a list of orientations using MCMC
+% 
+% Input Arguments:
+% - odf (SO3Fun)
+%   ODF to sample from
+%
+% - psi (SO3Kernel)
+%   SO3Kernel function
+%
+% - samples (orientation)
+%   Samples previously drawn from the ODF
+%
+% - n_loop (integer)
+%   Current number of samples drawn
+%
+% - sample (orientation)
+%   New orientation sampled from the ODF
+% 
+% - min_error (float)
+%   Current ODF error
+%
+% - threshold (float)
+%   Minimum accuracy threshold
+%
+% Output Arguments:
+% - samples (orientation)
+%   Updated samples drawn from the ODF
+%
+% - n_loop (integer)
+%   Updated number of samples drawn
+%
+% - min_error (float)
+%   Updated ODF error
 
     % make a temp copy
     temp_samples = samples;

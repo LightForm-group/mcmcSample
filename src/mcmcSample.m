@@ -1,5 +1,27 @@
-function [samples] = mcmcSample(odf,psi,n,threshold)
-
+function samples = mcmcSample(odf,n,varargin)
+% mcmcSample - Sample an ODF using a MCMC algorithm
+% 
+% Input Arguments:
+% - odf (SO3Fun)
+%   ODF to sample from
+%
+% - n (integer)
+%   Number of samples to draw
+%
+% - threshold (float)
+%   Optional minimum accuracy threshold, default 0.05
+% 
+% - kernel (SO3Kernel)
+%   Optional kernel to specify, default SO3DeLaValleePoussinKernel()
+%
+% Output Arguments:
+% - samples (array)
+%   Samples drawn from the ODF
+    
+    % default arguments
+    threshold = get_option(varargin, 'threshold',0.05);
+    psi = get_option(varargin, 'kernel', SO3DeLaValleePoussinKernel())
+        
     % check the number of accepted samples
     n_loop = 1;
     
