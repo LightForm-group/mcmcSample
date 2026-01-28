@@ -13,12 +13,12 @@ ori = [orientation.byEuler(135*degree,45*degree,120*degree,CS,SS) ...
 c = [.4,.13,.4,.07];
 
 % the model odf
-odf = unimodalODF(ori(:),'weights',c,'halfwidth',12*degree)
+odf = unimodalODF(ori(:),'weights',c,'halfwidth',12*degree);
 
-plotPDF(odf,h,'antipodal','silent','complete')
+plotPDF(odf,h,'antipodal','silent','complete');
 
 %% stochastic improvement sampling using mcmcSample
-n = 25; % number of samples
+n = 50; % number of samples
 threshold = 0.05; % threshold error
 
 samples = mcmcSample(odf,psi,n,threshold);
