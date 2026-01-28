@@ -11,9 +11,11 @@ function [samples] = mcmcSample(odf,psi,n,threshold)
     
     % determine the baseline error
     min_error = calcError(odf,odf_redo);
-
-    f = waitbar(0, 'Beginning sample...');
     
+    % create a waitbar to track progress
+    f = waitbar(0, 'Beginning sample...');
+    pause(.5)
+
     % loop
     while n_loop < n
         
@@ -30,3 +32,7 @@ function [samples] = mcmcSample(odf,psi,n,threshold)
         f = waitbar(fraction,f,statement);
 
     end
+    
+    % close the waitbar and print the final result
+    close(f)
+    disp(statement)
