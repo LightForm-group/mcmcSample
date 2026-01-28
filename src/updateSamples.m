@@ -1,4 +1,4 @@
-function [samples,n_loop,min_error] = updateSamples(odf,psi,samples,n_loop,sample,min_error,threshold)
+function [samples,nLoop,minimumError] = updateSamples(odf,psi,samples,nLoop,sample,minimumError,threshold)
 % updateSamples - Update a list of orientations using MCMC
 % 
 % Input Arguments:
@@ -11,13 +11,13 @@ function [samples,n_loop,min_error] = updateSamples(odf,psi,samples,n_loop,sampl
 % - samples (orientation)
 %   Samples previously drawn from the ODF
 %
-% - n_loop (integer)
+% - nLoop (integer)
 %   Current number of samples drawn
 %
 % - sample (orientation)
 %   New orientation sampled from the ODF
 % 
-% - min_error (float)
+% - minimumError (float)
 %   Current ODF error
 %
 % - threshold (float)
@@ -27,34 +27,34 @@ function [samples,n_loop,min_error] = updateSamples(odf,psi,samples,n_loop,sampl
 % - samples (orientation)
 %   Updated samples drawn from the ODF
 %
-% - n_loop (integer)
+% - nLoop (integer)
 %   Updated number of samples drawn
 %
-% - min_error (float)
+% - minimumError (float)
 %   Updated ODF error
 
-    % make a temp copy
-    temp_samples = samples;
+    % make a trial copy of samples
+    trialSamples = samples;
     
-    % add the new sample to the list
-    temp_samples(n_loop+1) = sample;    
+    % add the new sample to the array
+    trialSamples(nLoop+1) = sample;    
     
     % calculate the new odf
-    odf_redo = calcDensity(temp_samples(1:n_loop+1),'kernel',psi);
+    odfReconstruction = calcDensity(trialSamples(1:nLoop+1),'kernel',psi);
     
     % determine the error
-    error = calcError(odf,odf_redo);
+    error = calcError(odf,odfReconstruction);
     
     % if error is reduced, then update the samples
-    if error <= min_error
+    if error <= minimumError
 
-        samples = temp_samples;
-        n_loop = n_loop + 1;
+        samples = trialSamples;
+        nLoop = nLoop + 1;
         
-        if min_error <= threshold
-            min_error = threshold;
+        if minimumError <= threshold
+            minimumError = threshold;
         else
-            min_error = error;
+            minimumError = error;
         end
     end
 end

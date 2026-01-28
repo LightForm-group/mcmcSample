@@ -20,36 +20,36 @@ function samples = mcmcSample(odf,n,varargin)
     
     % default arguments
     threshold = get_option(varargin, 'threshold',0.05);
-    psi = get_option(varargin, 'kernel', SO3DeLaValleePoussinKernel())
+    psi = get_option(varargin, 'kernel', SO3DeLaValleePoussinKernel());
         
     % check the number of accepted samples
-    n_loop = 1;
+    nLoop = 1;
     
     % create a dummy list of samples for memory pre-allocation
     samples = odf.discreteSample(n);
    
-    % calculate the odf, only using n_loop samples
-    odf_redo = calcDensity(samples(1:n_loop),'kernel',psi);
+    % calculate the odf, only using nLoop samples
+    odfReconstruction = calcDensity(samples(1:nLoop),'kernel',psi);
     
     % determine the baseline error
-    min_error = calcError(odf,odf_redo);
+    minimumError = calcError(odf,odfReconstruction);
     
     % create a waitbar to track progress
-    f = waitbar(0, 'Beginning sample...');
+    f = waitbar(0, 'Beginning sampling algorithm...');
     pause(.5)
 
     % loop
-    while n_loop < n
+    while nLoop < n
         
         % sample the objective odf once
         trial_sample = odf.discreteSample(1);
         
         % add to the list of samples and determine if the error is reduced
-        [samples,n_loop,min_error] = updateSamples(odf,psi,samples,n_loop,trial_sample,min_error,threshold);
+        [samples,nLoop,minimumError] = updateSamples(odf,psi,samples,nLoop,trial_sample,minimumError,threshold);
 
-        statement = ['Number of samples: ',num2str(n_loop),', ODF error: ', num2str(round(min_error,3))];
+        statement = ['Number of samples: ',num2str(nLoop),', ODF error: ', num2str(round(minimumError,3))];
         
-        fraction = n_loop/n;
+        fraction = nLoop/n;
 
         f = waitbar(fraction,f,statement);
 

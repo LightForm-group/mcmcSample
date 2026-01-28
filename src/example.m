@@ -13,7 +13,8 @@ ori = [orientation.byEuler(135*degree,45*degree,120*degree,CS,SS) ...
 c = [.4,.13,.4,.07];
 
 % the model odf
-odf = unimodalODF(ori(:),'weights',c,'halfwidth',12*degree);
+psi = SO3DeLaValleePoussinKernel('halfwidth',12.0*degree, 'bandwidth',16);
+odf = unimodalODF(ori(:),'weights',c,'kernel',psi);
 
 plotPDF(odf,h,'antipodal','silent','complete');
 
@@ -21,19 +22,19 @@ plotPDF(odf,h,'antipodal','silent','complete');
 n = 50; % number of samples
 threshold = 0.05; % threshold error
 
-samples = mcmcSample(odf,psi,n,threshold);
+samples = mcmcSample(odf,n,'threshold',threshold,'kernel',psi);
 
 %% compare errors
 
 % calculate the odf for the mcmcSample and the equivalent discreteSample
-odf_redo = calcDensity(samples,'kernel',psi);
-odf_direct = calcDensity(odf.discreteSample(100),'kernel',psi)
+odfReconstruction = calcDensity(samples,'kernel',psi);
+odfDirect = calcDensity(odf.discreteSample(100),'kernel',psi)
 
-direct_error = calcError(odf,odf_direct)
-mcmc_error = calcError(odf,odf_redo)
+directError = calcError(odf,odfDirect)
+MCMCError = calcError(odf,odfReconstruction)
 
 % print statement
-statement = ['discreteSample error: ',num2str(direct_error),', mcmcSample error: ', num2str(mcmc_error)];
+statement = ['discreteSample error: ',num2str(directError),', mcmcSample error: ', num2str(MCMCError)];
 disp(statement)
 
-plotPDF(odf_redo,h,'antipodal','silent','complete')
+plotPDF(odfReconstruction,h,'antipodal','silent','complete')
