@@ -28,7 +28,7 @@ samples = mcmcSample(odf,n,'threshold',threshold,'kernel',psi);
 
 % calculate the odf for the mcmcSample and the equivalent discreteSample
 odfReconstruction = calcDensity(samples,'kernel',psi);
-odfDirect = calcDensity(odf.discreteSample(100),'kernel',psi)
+odfDirect = calcDensity(odf.discreteSample(n),'kernel',psi)
 
 directError = calcError(odf,odfDirect)
 MCMCError = calcError(odf,odfReconstruction)
