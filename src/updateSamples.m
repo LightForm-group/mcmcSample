@@ -1,4 +1,4 @@
-function [samples,nLoop,minimumError] = updateSamples(odf,psi,samples,nLoop,sample,minimumError,threshold)
+function [samples,nLoop,minimumError] = updateSamples(odf,psi,samples,nLoop,sample,minimumError,threshold,method)
 % updateSamples - Update a list of orientations using MCMC
 % 
 % Input Arguments:
@@ -23,6 +23,9 @@ function [samples,nLoop,minimumError] = updateSamples(odf,psi,samples,nLoop,samp
 % - threshold (float)
 %   Minimum accuracy threshold
 %
+% - method (string)
+%   Options are metropolis-hastings or rejection
+%
 % Output Arguments:
 % - samples (orientation)
 %   Updated samples drawn from the ODF
@@ -46,15 +49,32 @@ function [samples,nLoop,minimumError] = updateSamples(odf,psi,samples,nLoop,samp
     error = calcError(odf,odfReconstruction);
     
     % if error is reduced, then update the samples
-    if error <= minimumError
+    if strcmp(method,'rejection')
+        if error <= minimumError
 
-        samples = trialSamples;
-        nLoop = nLoop + 1;
-        
-        if minimumError <= threshold
-            minimumError = threshold;
-        else
-            minimumError = error;
+            samples = trialSamples;
+            nLoop = nLoop + 1;
+            
+            if minimumError <= threshold
+                minimumError = threshold;
+            else
+                minimumError = error;
+            end
         end
+    elseif strcmp(method,'metropolisHasting')
+        if minimumError/error >= rand()
+
+            samples = trialSamples;
+            nLoop = nLoop + 1;
+            
+            if minimumError <= threshold
+                minimumError = threshold;
+            else
+                minimumError = error;
+            end
+        end
+    else 
+        msg = 'Error occurred: sampling alogrithm is invalid.'
+        error(msg)
     end
 end

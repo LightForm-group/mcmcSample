@@ -14,6 +14,10 @@ function samples = mcmcSample(odf,n,varargin)
 % - kernel (SO3Kernel)
 %   Optional kernel to specify, default SO3DeLaValleePoussinKernel()
 %
+% - method (string)
+%   Optional sampling algorithm to specify, options are metropolis-hastings or rejection,
+%   default rejection
+%
 % Output Arguments:
 % - samples (array)
 %   Samples drawn from the ODF
@@ -21,7 +25,8 @@ function samples = mcmcSample(odf,n,varargin)
     % default arguments
     threshold = get_option(varargin, 'threshold',0.05);
     psi = get_option(varargin, 'kernel', SO3DeLaValleePoussinKernel());
-        
+    method = get_option(varargin, 'method', 'rejection');
+
     % check the number of accepted samples
     nLoop = 1;
     
@@ -45,7 +50,7 @@ function samples = mcmcSample(odf,n,varargin)
         trial_sample = odf.discreteSample(1);
         
         % add to the list of samples and determine if the error is reduced
-        [samples,nLoop,minimumError] = updateSamples(odf,psi,samples,nLoop,trial_sample,minimumError,threshold);
+        [samples,nLoop,minimumError] = updateSamples(odf,psi,samples,nLoop,trial_sample,minimumError,threshold,method);
 
         statement = ['Number of samples: ',num2str(nLoop),', ODF error: ', num2str(round(minimumError,3))];
         
