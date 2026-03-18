@@ -7,7 +7,7 @@ The sampling procedure has been developed with the following versions of MTEX an
 - MATLAB_R2024b
 
 ## Usage
-An ODF may be sampled using the `mcmcSample` function by specifying an ODF and the number of samples. Optional arguments such as a kernel and an accuracy threshold may also be specified using the keywords `kernel` and `threshold`, respectively. See the `src/example.m` script for further details. 
+An ODF may be sampled using the `mcmcSample` function by specifying an ODF and the number of samples. Optional arguments such as a kernel and an accuracy threshold may also be specified using the keywords `kernel` and `threshold`, respectively. See the `src/example.m` script for further details. Additionally, the sampling algorithm may be chose using `method`, with available options `rejection` which only keeps samples which reduce the overall error and `metropolisHastings` which accepts samples with a random chance proportional to the relative error change. 
 
 ## Installation
 The scripts can be used by either running directly or adding to the MATLAB path using the 'Set Path' dialogue box. 
