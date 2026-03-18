@@ -61,7 +61,7 @@ function [samples,nLoop,minimumError] = updateSamples(odf,psi,samples,nLoop,samp
                 minimumError = error;
             end
         end
-    elseif strcmp(method,'metropolisHasting')
+    elseif strcmp(method,'metropolisHastings')
         if minimumError/error >= rand()
 
             samples = trialSamples;
