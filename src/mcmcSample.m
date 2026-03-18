@@ -15,7 +15,7 @@ function samples = mcmcSample(odf,n,varargin)
 %   Optional kernel to specify, default SO3DeLaValleePoussinKernel()
 %
 % - method (string)
-%   Optional sampling algorithm to specify, options are metropolis-hastings or rejection,
+%   Optional sampling algorithm to specify, options are metropolisHastings or rejection,
 %   default rejection
 %
 % Output Arguments:
